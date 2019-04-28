@@ -1,0 +1,20 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+  - "3.7"
+# command to install dependencies
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+- docker pull cassandra
+- docker run --name cassandra -d cassandra:latest
+install:
+  - make bootstrap
+# command to run tests
+script:
+  -  make test
