@@ -38,17 +38,17 @@ test:
 build:
 	python setup.py build
 
-# publish: test build
-# 	@git diff-index --quiet HEAD || (echo "git has uncommitted changes. Refusing to publish." && false)
-# 	awk 'BEGIN { FS = "." }; { printf("%d.%d.%d", $$1, $$2, $$3+1) }' VERSION > VERSION.incr
-# 	mv VERSION.incr VERSION
-# 	git add VERSION
-# 	git commit -m "Update VERSION"
-# 	git tag `cat VERSION`
-# 	git push
-# 	git push --tags
-# 	python setup.py register -r pypi || (echo "Was unable to register to pypi, aborting publish." && false)
-# 	python setup.py sdist upload -r pypi || (echo "Was unable to upload to pypi, publish failed." && false)
-# 	@echo
-# 	@echo "\033[92mSUCCESS: published v`cat VERSION` \033[0m"
-# 	@echo
+publish: test build
+	@git diff-index --quiet HEAD || (echo "git has uncommitted changes. Refusing to publish." && false)
+	awk 'BEGIN { FS = "." }; { printf("%d.%d.%d", $$1, $$2, $$3+1) }' VERSION > VERSION.incr
+	mv VERSION.incr VERSION
+	git add VERSION
+	git commit -m "Update VERSION"
+	git tag `cat VERSION`
+	git push
+	git push --tags
+	python setup.py register -r pypi || (echo "Was unable to register to pypi, aborting publish." && false)
+	python setup.py sdist upload -r pypi || (echo "Was unable to upload to pypi, publish failed." && false)
+	@echo
+	@echo "\033[92mSUCCESS: published v`cat VERSION` \033[0m"
+	@echo
