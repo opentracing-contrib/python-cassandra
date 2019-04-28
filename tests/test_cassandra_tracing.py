@@ -1,4 +1,4 @@
-# stdlib
+# -*- coding: utf-8 -*-
 import unittest
 
 from cassandra import InvalidRequest
