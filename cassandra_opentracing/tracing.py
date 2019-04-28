@@ -79,7 +79,7 @@ class QueryTracing:
             return
 
         span.set_tag(tags.ERROR, True)
-        span.set_tag("exception", str(exc))
+        span.log_kv({"event": tags.ERROR, "error.object": exc})
         span.set_tag("reported_duration", time.time() - span._cassandra_start_ts)
         span.finish()
 

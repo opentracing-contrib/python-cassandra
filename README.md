@@ -29,7 +29,7 @@ If you query contains parameters, the query will include the `%s` or `?`
 QueryTracing(self.session, span_name='execute')
 ```
 
-All the spans will be sent to the tracer with the name `execute`.
+All the spans will be sent to the tracer with the name `execute`. Note the query string will still be sent in the tag `db.statement`.
 
 ### Using a prefix
 
@@ -54,6 +54,25 @@ All queries will contain the custom tags.
 ### Using a custom tracer
 
 You may pass a `tracer` argument to QueryTracing. If you don't, the default `opentracing.tracer` will be used.
+
+## Tags
+
+All traces will contain the following tags:
+
+### OpenTracing standard tags:
+
+- `db.type`: cassandra
+- `component`: `cassandra-driver`
+- `db.instance`: The execution keyspace except when the keyspace is overriden on the query string (see Known Issues).
+- `db.statement`: The query string itself.
+- `consistency_level`: If the query specified a consistency level, this tag will be present.
+- `error`: In case of error, this will be set to True and a log will be issued with the error message.
+
+### Tags added by this library
+
+- `command`: This indicates the CQL operation, e.g: `SELECT`, `UPDATE`, `CREATE KEYSPACE`, etc.
+- `paginated`: If the query is pagined, this will be set to True.
+- `reported_duration`: The time taken to execute the query. Note that this time takes into account the network roundtrip as well.
 
 ## Known Issues
 
