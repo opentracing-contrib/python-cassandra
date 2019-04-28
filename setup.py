@@ -18,8 +18,8 @@ setup(
     extras_require={
         "tests": [
             "mock<1.1.0",
-            "pytest",
-            "pytest-cov",
+            "pytest==4.4.1",
+            "pytest-cov==2.6.1",
         ]
     },
     classifiers=[
