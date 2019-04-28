@@ -20,6 +20,7 @@ setup(
             "mock<1.1.0",
             "pytest==4.4.1",
             "pytest-cov==2.6.1",
+            "codecov",
         ]
     },
     classifiers=[

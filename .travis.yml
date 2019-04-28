@@ -18,3 +18,6 @@ install:
 #   - sudo service cassandra start
 script:
   -  make test
+
+after_success:
+  - codecov -v
