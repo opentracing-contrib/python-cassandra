@@ -1,7 +1,6 @@
 project := cassandra_opentracing
 
-pytest := PYTHONDONTWRITEBYTECODE=1 py.test --tb short -rxs \
-		--cov-report term-missing:skip-covered --cov=$(project) tests
+pytest := py.test --tb short -rxs --cov-report term-missing:skip-covered --cov=cassandra_opentracing tests
 
 .PHONY: test publish install clean clean-build clean-pyc clean-test build
 
