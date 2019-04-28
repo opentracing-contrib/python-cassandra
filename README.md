@@ -1,4 +1,4 @@
-[![Build Status][ci-img]][ci]
+[![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov]
 
 
 # opentracing-python-cassandra
@@ -82,3 +82,5 @@ All traces will contain the following tags:
 
 [ci-img]: https://travis-ci.org/nicholasamorim/opentracing-python-cassandra.svg?branch=master
 [ci]: https://travis-ci.org/nicholasamorim/opentracing-python-cassandra
+[cov-img]: https://codecov.io/gh/nicholasamorim/opentracing-python-cassandra/branch/master/graph/badge.svg
+[cov]: https://codecov.io/gh/nicholasamorim/opentracing-python-cassandra
