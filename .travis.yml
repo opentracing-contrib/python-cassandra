@@ -8,11 +8,8 @@ python:
 sudo: required
 
 services:
-  - docker
+  - cassandra
 
-before_install:
-- docker pull cassandra
-- docker run --name cassandra -p 9042:9042 -d cassandra:latest
 install:
   - make bootstrap
 # command to run tests
