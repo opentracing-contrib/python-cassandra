@@ -1,4 +1,4 @@
-[![PyPI version][pypi-img]][pypi] [![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov]
+[![Build Status][ci-img]][ci]
 
 
 # opentracing-python-cassandra
