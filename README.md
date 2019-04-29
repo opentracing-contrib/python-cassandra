@@ -19,9 +19,8 @@ session = cluster.connect('my_keyspace')
 QueryTracing(self.session)
 ```
 
-This will automatically trace all your queries (except for `BatchStatement`, see Known Issues). The default span operation name will be the query string, e.g: `SELECT * FROM test`
+This will automatically trace all your queries (except for `BatchStatement`, see Known Issues). The default span operation name is `execute` for all queries. Operation name are meant to be low cardinality and there's a standard tag for the query statement: `db.statement`.
 
-If you query contains parameters, the query will include the `%s` or `?`
 
 ### Using fixed span name
 
@@ -38,6 +37,19 @@ QueryTracing(self.session, prefix='Custom')
 ```
 
 All the spans will contain a prefix and it will looke like: "Custom: SELECT * FROM..."
+
+### Using query string as span name
+
+```python
+# set up your tracer
+cluster = Cluster()
+session = cluster.connect('my_keyspace')
+QueryTracing(self.session, use_querystring_as_name=True)
+```
+
+If you query contains parameters, the query will include the `%s` or `?`. The span will be the query string, e.g: `SELECT * FROM test_table WHERE name = %s`.
+
+When passing `use_querystring_as_name`, you can still use `prefix` but any value passed in `span_name` will be ignored.
 
 ### Adding more span tags
 

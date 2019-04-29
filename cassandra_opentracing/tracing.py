@@ -14,16 +14,19 @@ class QueryTracing:
     """
 
     def __init__(
-        self, session, tracer=None, span_tags=None, prefix=None, span_name=None
+        self, session, tracer=None, span_tags=None, prefix=None, span_name="execute", use_querystring_as_name=False
     ):
-        """By default the span name is the query statement, but you may adjust
-        that either by using a custom prefix or by passing a fixed `span_name`.
+        """By default the span name is "execute" for all queries.
+        You may adjust that either by using a custom prefix or by using an entirely
+        different name by passing `span_name`.
 
         :param session: A `cassandra.cluster.session` to be traced.
         :param tracer: A tracer - optional. If not passed, it will just retrieve global tracer.
         :param span_tags: A dictionary of custom spam tags you may want to add.
         :param prefix: If passed, it will prefix every span name.
         :param span_name: If passed, it will be a fixed span name.
+        :param use_querystring_as_name: If True, it will use the query string as the span name.
+            `span_name`will be ignored, `prefix` will not be ignored.
         """
         self._tracer = tracer or opentracing.tracer
         self.session = session
@@ -31,17 +34,26 @@ class QueryTracing:
         self._span_tags = span_tags or {}
         self._prefix = prefix
         self._span_name = span_name
+        self._use_qs_as_name = use_querystring_as_name
+
+    def get_span_name(self, query_string):
+        if self._use_qs_as_name:
+            span_name = query_string
+        else:
+            span_name = self._span_name
+
+        if self._prefix:
+            span_name = "{}: {}".format(self._prefix, span_name)
+
+        return span_name
 
     def on_request(self, rf):
         query_string = self.get_query_string(rf)
         if not query_string:
             return rf
         active = self._tracer.scope_manager.active
-        span_name = self._span_name or query_string
-        if self._prefix:
-            span_name = "{}: {}".format(self._prefix, span_name)
         span = self._tracer.start_span(
-            span_name, child_of=getattr(active, "span", None)
+            self.get_span_name(query_string), child_of=getattr(active, "span", None)
         )
 
         span.set_tag(tags.DATABASE_TYPE, "cassandra")

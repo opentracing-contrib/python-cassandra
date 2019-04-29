@@ -69,6 +69,20 @@ class TestCassandra(unittest.TestCase):
         spans = self.tracer.finished_spans()
         self.assertEqual(len(spans), 1)
         span = spans[0]
+        self.assertEqual(span.operation_name, 'execute')
+        self.assertTags(span.tags, "test", statement, "SELECT")
+
+    def test_simple_statement_select_query_as_name(self):
+        self.session = self.cluster.connect("test")
+        self.qt = QueryTracing(
+            self.session, tracer=self.tracer, span_tags={"one": "more", "tag": 2},
+            use_querystring_as_name=True
+        )
+        statement = "SELECT * FROM luthier"
+        self.session.execute(statement)
+        spans = self.tracer.finished_spans()
+        self.assertEqual(len(spans), 1)
+        span = spans[0]
         self.assertEqual(span.operation_name, statement)
         self.assertTags(span.tags, "test", statement, "SELECT")
 
@@ -80,7 +94,7 @@ class TestCassandra(unittest.TestCase):
         self.assertEqual(len(spans), 2)
         self.assertEqual(spans[1].operation_name, "simple")
         query_span = spans[0]
-        self.assertEqual(query_span.operation_name, statement)
+        self.assertEqual(query_span.operation_name, 'execute')
         self.assertTags(query_span.tags, "test", statement, "SELECT")
 
     def test_prepared_statement_select(self):
@@ -123,7 +137,7 @@ class TestCassandra(unittest.TestCase):
         spans = self.tracer.finished_spans()
         self.assertEqual(len(spans), 1)
         span = spans[0]
-        self.assertEqual(span.operation_name, statement)
+        self.assertEqual(span.operation_name, 'execute')
         self.assertTags(
             span.tags,
             "test",
@@ -151,5 +165,5 @@ class TestCassandra(unittest.TestCase):
         spans = self.tracer.finished_spans()
         self.assertEqual(len(spans), 1)
         span = spans[0]
-        self.assertEqual(span.operation_name, "Custom: {}".format(statement))
+        self.assertEqual(span.operation_name, "Custom: {}".format('execute'))
         self.assertTags(span.tags, "test", statement, "SELECT")
