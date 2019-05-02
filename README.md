@@ -91,8 +91,7 @@ All traces will contain the following tags:
 - BatchStatement are yet unsupported as there is no simple way to get the executed query strings.
 - Queries that override the keyspace (`SELECT * FROM keyspace.table`) won't have the overriden keyspace sent to the tracer.
 
-
-[ci-img]: https://travis-ci.org/nicholasamorim/opentracing-python-cassandra.svg?branch=master
-[ci]: https://travis-ci.org/nicholasamorim/opentracing-python-cassandra
+[ci-img]: https://travis-ci.org/opentracing-contrib/python-cassandra.svg?branch=master
+[ci]: https://travis-ci.org/opentracing-contrib/python-cassandra
 [cov-img]: https://codecov.io/gh/nicholasamorim/opentracing-python-cassandra/branch/master/graph/badge.svg
 [cov]: https://codecov.io/gh/nicholasamorim/opentracing-python-cassandra
