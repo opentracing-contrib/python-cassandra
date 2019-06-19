@@ -14,7 +14,7 @@ setup(
     long_description=open("README.md").read(),
     packages=["cassandra_opentracing"],
     platforms="any",
-    install_requires=["cassandra-driver", "opentracing>=2.0,<2.1"],
+    install_requires=["cassandra-driver", "opentracing>=2.0"],
     extras_require={
         "tests": [
             "mock<1.1.0",
