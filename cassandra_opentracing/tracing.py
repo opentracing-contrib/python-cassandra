@@ -101,14 +101,19 @@ class QueryTracing:
     def get_query_string(self, rf):
         query = rf.query
         if isinstance(query, (SimpleStatement, PreparedStatement)):
-            return rf.query.query_string
+            qs = rf.query.query_string
         elif isinstance(query, BoundStatement):
-            return query.prepared_statement.query_string
+            qs = query.prepared_statement.query_string
         elif isinstance(query, BatchStatement):
             # not implemented, can't get statement
             return
         elif isinstance(query, str):
-            return query
+            qs = query
+
+        if isinstance(qs, bytes):
+            qs = qs.decode()
+
+        return " ".join(qs.split())
 
     def get_operation(self, query_string):
         qs = query_string[:30].upper()
